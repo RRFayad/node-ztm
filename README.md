@@ -72,3 +72,27 @@ Steps:
 - Authorization (or access control) checks whether that an user has access to a specific resource after he is authenticated
 
 - So, when we say about "auth", it usually englobes both
+
+### Social Sign In
+
+- Feature for signing in with social providers, such as Google, Github, Apple, Facebook etc
+
+### API Keys
+
+- There are 3 main methods to give authenticate an user:
+
+  - API Keys
+  - OAuth
+  - JWT
+
+- API Keys
+  - Usually in params or in headers
+  - Great for checks - Such as limit req frequency, identifying etc
+
+### JWT
+
+- ![Flow](./14.%20Security%20and%20Authentication/security-example/Notes%20Attachments/image.png)
+- Encoded info, structured in:
+  - Header
+  - Payload
+  - Signature
