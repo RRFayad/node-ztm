@@ -60,3 +60,7 @@ Steps:
 - RIght after the https requests are handled, the next step is secure our server from congiruation issues
 
 - Helmet is a highly used NPM package that add security features, with just app.use(helmet())
+
+  - npm install helmet
+
+- Its a good practice to implement it in every project
