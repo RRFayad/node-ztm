@@ -96,3 +96,29 @@ Steps:
   - Header
   - Payload
   - Signature
+
+### OAuth Standard
+
+- An authentication standard, which defines the data flow behind the scenes, and allow Social Sign In
+
+### OAuth Flow
+
+- 1st, we got:
+  - Resource Owner => User
+  - Client => Web Application Front End
+  - Resource Server => Web Application Server
+  - Authorization Server => Server that authenticates (such as google or github)
+
+![OAuth flow](./14.%20Security%20and%20Authentication//security-example/Notes%20Attachments/OAuth.png)
+
+### OAuth In Action with Single Sign On
+
+- Lets see in practice (checking the dev tools to analyze reqs and res)
+
+- Steps:
+  - In medium, we clicked in login with Google btn;
+    - A req was sent to medium api, to a route of sign in with google
+  - So we were redirected to Google's domain (oauth2/auth endpoint)
+    - To sign in and give permissions
+  - We were redirected to Medium's api/callback/authenticate
+    - In the params, Medium gets the toen the needs to complete the flow
