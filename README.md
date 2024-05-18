@@ -53,3 +53,10 @@ Steps:
 ```
 
 - tbh, I am not sure about how it works for production environment
+- As I googled, when working with a service such as Heroku, I don't have to mind about the SSL config
+
+### Helmet.js
+
+- RIght after the https requests are handled, the next step is secure our server from congiruation issues
+
+- Helmet is a highly used NPM package that add security features, with just app.use(helmet())
