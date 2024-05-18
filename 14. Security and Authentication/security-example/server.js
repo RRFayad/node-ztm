@@ -1,4 +1,6 @@
+const fs = require("fs");
 const path = require("path");
+const https = require("http");
 const express = require("express");
 
 const PORT = 5000;
@@ -12,6 +14,14 @@ app.get("/", (req, res, next) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`Running on port ${PORT}`);
-});
+https
+  .createServer(
+    {
+      key: fs.readFileSync("./key.pem"),
+      cert: fs.readFileSync("./cert.pem"),
+    },
+    app
+  )
+  .listen(PORT, () => {
+    console.log(`Running on port ${PORT}`);
+  });

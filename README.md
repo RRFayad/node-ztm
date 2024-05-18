@@ -31,4 +31,25 @@ https://zerotomastery.io/cheatsheets/
 
 ### Setting up our server (Secutiry-Example folder)
 
--
+Steps:
+
+1. Create key and certificates running in the command line (with OpenSSL installed):
+   Openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 3650
+   Common name - SHould ideally be the domain name
+
+2. Now we have the key and certificate
+
+- The key means we are allowed to encrypt data from that cert
+- The certificate allows who have the key to decrypt the data
+
+3. Change my app.listen to:
+
+```
+  https
+.createServer({
+  key: fs.readFileSync("./key.pem"),
+  cert: fs.readFileSync("./cert.pem"),
+}, app).listen(.......)
+```
+
+- tbh, I am not sure about how it works for production environment
