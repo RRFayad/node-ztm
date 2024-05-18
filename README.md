@@ -64,3 +64,11 @@ Steps:
   - npm install helmet
 
 - Its a good practice to implement it in every project
+
+### Authentication vs Authorization
+
+- Authentication validates users are who the claim to be (email and password, biometrics, 2 factor auth, etc)
+
+- Authorization (or access control) checks whether that an user has access to a specific resource after he is authenticated
+
+- So, when we say about "auth", it usually englobes both
