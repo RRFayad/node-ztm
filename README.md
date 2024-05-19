@@ -122,3 +122,15 @@ Steps:
     - To sign in and give permissions
   - We were redirected to Medium's api/callback/authenticate
     - In the params, Medium gets the toen the needs to complete the flow
+
+### Implementing Google OAuth in our application
+
+- Setup Application in Google
+  - Create OAuth Client ID
+  - Attention to the URIs
+
+### Authentication Endpoints With Middleware
+
+- When checking auth, we should use a middleware before the restricted endpoints
+
+- Also, we planned our routes first (google sign in, google callback and logout (which is not Google specific))
