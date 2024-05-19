@@ -219,3 +219,18 @@ Steps:
 
 - Sessions are usually short-lived, usually relevant states (like items of a shopping cart)
   - While more persistent data (such as orders history) in the Database
+
+### Server VS Client Side Sessions With Cookies
+
+- How do we store session data?
+
+  - Server side sessions => database
+  - Client-Side Sessions => In the browsers cookies
+
+- So we could use Stateful Cookies or Stateless Cookies
+
+  - Stateful Cookies - Are the ones stored in the server / DB, which has its own costs, as may compromise scalability, as it will overload the server, making it Read and Write constantly from the Database
+  - Stateless Cookies - Stored in the Browser's cookies - The server can still trust in the data, _as long as the server signs - wit the secret - or encrypts the user's cookies before they are sent_
+
+- When we are REALLY concerned to the data, it's good to use server side session, but in the majority of cases, Client-Side Sessions are enough
+  - Such as user logged in info, Client-Side session are less expensive and enough
