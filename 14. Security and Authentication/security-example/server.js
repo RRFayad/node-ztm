@@ -3,11 +3,33 @@ const path = require("path");
 const https = require("https");
 const helmet = require("helmet");
 const express = require("express");
-const { error } = require("console");
+const passport = require("passport");
+const Strategy = require("passport-google-oauth20").Strategy;
 
 const PORT = 3000;
+require("dotenv").config();
+
+const verifyCallback = (accessToken, refreshToken, profile, done) => {
+  console.log({ accessToken, refreshToken, profile });
+  done(null, profile);
+};
+
+// Passport Configuration MW
+passport.use(
+  new Strategy(
+    {
+      callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URI,
+      clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    },
+    verifyCallback
+  )
+);
+
 const app = express();
+
 app.use(helmet()); // The very 1st MW, to ensure all reqs passes here
+app.use(passport.initialize());
 
 // Notice that this MW is not running here, it was just created, to be implemented whenever it is wanted
 const checkLoggedIn = (req, res, next) => {

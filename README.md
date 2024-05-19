@@ -134,3 +134,47 @@ Steps:
 - When checking auth, we should use a middleware before the restricted endpoints
 
 - Also, we planned our routes first (google sign in, google callback and logout (which is not Google specific))
+
+### Passport.js
+
+- Passport helps us to implement OAuth with different strategies (plug ins for different companies)
+
+### Steps:
+
+1.  Setup Application in Social Networks (Google, Github etc)
+
+    - Get the keys in a .env file
+
+2.  Structure Endpoints and Auth Middlwares
+
+3.  Passport
+
+    - Install passport and the passport stragtegies
+    - Require passport and the Strategy
+    - Create the passport configutarion MW (which may need a verifyCallback), in the beginning (we did it even before creating the express app):
+
+      ```
+        const verifyCallback = (accessToken, refreshToken, profile, done) => {
+            console.log({ accessToken, refreshToken, profile });
+            done(null, profile);
+            };
+
+        passport.use(
+        new Strategy(
+        {
+        callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URI,
+        clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        },
+        verifyCallback
+        )
+      );
+      ```
+
+- Add passport initialize MW, as one of the firsts steps after te app is created:
+
+  ```
+  app.use(passport.initialize());
+  ```
+
+-
