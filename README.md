@@ -147,7 +147,7 @@ Steps:
 
 2.  Structure Endpoints and Auth Middlwares
 
-3.  Passport
+3.  Passport Config
 
     - Install passport and the passport stragtegies
     - Require passport and the Strategy
@@ -171,10 +171,28 @@ Steps:
       );
       ```
 
-- Add passport initialize MW, as one of the firsts steps after te app is created:
+    - Add passport initialize MW, as one of the firsts steps after te app is created:
+
+      ```
+      app.use(passport.initialize());
+      ```
+
+4.  Implementing the Auth routes and controllers
+
+- Add the google (or other network) callback endpoint logic
 
   ```
-  app.use(passport.initialize());
-  ```
+  app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
 
--
+  app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/failure",
+    successRedirect: "/",
+    session: false, // We will keep it as false just for now
+  }),
+  (req, res, next) => {
+    console.log("Google called us back!! Yaay");
+  }
+  ); // The specified redirect in our google configuration
+  ```

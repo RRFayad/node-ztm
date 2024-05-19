@@ -42,14 +42,28 @@ const checkLoggedIn = (req, res, next) => {
   next();
 };
 
-app.get("/auth/google", (req, res, next) => {});
+app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
 
-app.get("/auth/google/callback", (req, res, next) => {}); // The specified redirect in our google configuration
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/failure",
+    successRedirect: "/",
+    session: false, // We will keep it as false just for now
+  }),
+  (req, res, next) => {
+    console.log("Google called us back!! Yaay");
+  }
+); // The specified redirect in our google configuration
 
 app.get("/auth/logout", (req, res, next) => {});
 
 app.get("/secret", checkLoggedIn, (req, res, next) => {
   return res.send("your secret value is 42");
+});
+
+app.get("/failure", (req, res, next) => {
+  return res.send("Failed to Log in");
 });
 
 app.get("/", (req, res, next) => {
