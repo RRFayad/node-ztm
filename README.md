@@ -179,20 +179,43 @@ Steps:
 
 4.  Implementing the Auth routes and controllers
 
-- Add the google (or other network) callback endpoint logic
+    - Add the google (or other network) callback endpoint logic
 
-  ```
-  app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
+          ```
+          app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
 
-  app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/failure",
-    successRedirect: "/",
-    session: false, // We will keep it as false just for now
-  }),
-  (req, res, next) => {
-    console.log("Google called us back!! Yaay");
-  }
-  ); // The specified redirect in our google configuration
-  ```
+          app.get(
+          "/auth/google/callback",
+          passport.authenticate("google", {
+            failureRedirect: "/failure",
+            successRedirect: "/",
+            session: false, // We will keep it as false just for now
+          }),
+          (req, res, next) => {
+            console.log("Google called us back!! Yaay");
+          }
+          ); // The specified redirect in our google configuration
+          ```
+
+### Cookies Based Auhentication
+
+    - Cookies are basically string data stored in the browser
+      - They can be seen in Dev tools -> application -> Cookies
+
+    ![Cookies Auth](14.%20Security%20and%20Authentication/security-example/Notes%20Attachments/cookies-auth.png)
+
+    - We can use Cookie-Based Auth instead of Token-Based Auth:
+      - Remembering about tokens: Browser send auth info to the server => Server validates and gives a token back => Browser send info with Bearer token in the Header=> server validate the token and res.status 200
+      - IN Cookie-Based: Browser sends auth info to Server => Server Set-Cookie:sessoin (instead of giving a token) => Now the Browser sedn reqs with the Header Cookie:session=... => Server find and deserialize session and res.status 200
+
+    - So, we need to understand what Session means
+
+### Sessions
+
+- Sessoins are a way of storing data about the current user
+
+  - Public data could be stores in the client-side
+  - In session we store data we don't want users to be able to modify
+
+- Sessions are usually short-lived, usually relevant states (like items of a shopping cart)
+  - While more persistent data (such as orders history) in the Database
