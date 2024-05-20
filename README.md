@@ -234,3 +234,29 @@ Steps:
 
 - When we are REALLY concerned to the data, it's good to use server side session, but in the majority of cases, Client-Side Sessions are enough
   - Such as user logged in info, Client-Side session are less expensive and enough
+
+### Implementing Session Middleware (How to remember the user logged in our app)
+
+- To that, we use Sessions
+  - As we use Express, there are 2 main package options to use: express-session and cookie-express
+- Lets analyze both:
+
+- Express-session
+
+  - It's used to save cookie in the server side
+  - It uses Cookies, but only to refer to sessoin Ids
+  - Session data lives in the database
+    - The express-session middleware uses in memory storage, which will get erased when the server is restarted
+
+- Cookie-session
+
+  - Stores the actual sessoin data inside the user's cookie
+  - It's simpler - does not require a database
+  - The cookie data needs to be small (browser limits the size of a cookie)
+
+- We are going to cookie-session, as it:
+  - simplifies scaling
+  - Can have multiple instances of our node server running
+  - don't need a database to accomplish
+  - The server can remain stateless
+  - Is enough in the majority of use cases
