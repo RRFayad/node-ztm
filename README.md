@@ -260,3 +260,10 @@ Steps:
   - don't need a database to accomplish
   - The server can remain stateless
   - Is enough in the majority of use cases
+
+### Implementing Auth Check with Cookies
+
+- Steps:
+  1. Config cookie-session
+  - npm install cookie-session
+  - Config the cookie right before passport.initialize()

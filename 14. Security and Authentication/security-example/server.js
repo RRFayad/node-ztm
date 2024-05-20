@@ -4,6 +4,7 @@ const https = require("https");
 const helmet = require("helmet");
 const express = require("express");
 const passport = require("passport");
+const cookieSession = require("cookie-session");
 const Strategy = require("passport-google-oauth20").Strategy;
 
 const PORT = 3000;
@@ -29,6 +30,13 @@ passport.use(
 const app = express();
 
 app.use(helmet()); // The very 1st MW, to ensure all reqs passes here
+app.use(
+  cookieSession({
+    name: "session",
+    maxAge: 1000 * 60 * 60 * 24, // time of persistance of the cookie
+    keys: [process.env.COOKIE_KEY_1, process.env.COOKIE_KEY_2], // Usually, we can use array, to rotate secret keys and not unable the current secret key
+  })
+);
 app.use(passport.initialize());
 
 // Notice that this MW is not running here, it was just created, to be implemented whenever it is wanted
