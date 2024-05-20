@@ -255,15 +255,45 @@ Steps:
   - The cookie data needs to be small (browser limits the size of a cookie)
 
 - We are going to cookie-session, as it:
+
   - simplifies scaling
   - Can have multiple instances of our node server running
   - don't need a database to accomplish
   - The server can remain stateless
   - Is enough in the majority of use cases
 
+- Actually cookie-session had an error, and we used express-session to make it work
+
 ### Implementing Auth Check with Cookies
 
 - Steps:
-  1. Config cookie-session
-  - npm install cookie-session
-  - Config the cookie right before passport.initialize()
+
+  1. Config express-session
+
+  - npm install express-session
+  - Config the session / cookie right before passport.initialize()
+
+  2. Wrap Up Cookie with Passport
+
+  - Set up serializeUser and deserializeUser methods (before the app runs)
+  - In the google/callback options - set sessoin to true (default)
+  - Add passport session MW right after the initialization
+    ```
+    app.use(passport.initialize());
+    app.use(passport.session()); // Configs the sessions: Authentications the session, config the serializeUser and deserializeUser logic etc
+    ```
+  -
+
+- Notes
+
+  1. express-session configuration
+
+  - The secret keys are the 'signatures' of the cookie being created by the server
+  - We can use an array of keys, for when we want to update the key but not to unable the current used kes
+
+  2. About Passport cookie implementation
+
+  - Passport has 2 funcions to work with cookies:
+    - passport.serialize() => serialize the user data to the cookie
+    - passport.deserialize()
+      - deserialize, or take the data from the cookie, and places it into the request object (req.user)
