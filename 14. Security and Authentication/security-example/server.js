@@ -11,7 +11,7 @@ const PORT = 3000;
 require("dotenv").config();
 
 const verifyCallback = (accessToken, refreshToken, profile, done) => {
-  console.log({ accessToken, refreshToken, profile });
+  // console.log({ accessToken, refreshToken, profile });
   done(null, profile); // This is the callback function to be run after the verification, so it would be here the DB logic, for example
 };
 
@@ -91,7 +91,9 @@ app.get(
   }
 );
 
-app.get("/auth/logout", (req, res, next) => {});
+app.get("/auth/logout", (req, res, next) => {
+  req.logout(() => res.redirect("/")); // From passport - Removes req.user and clears any logged in session
+});
 
 app.get("/secret", checkLoggedIn, (req, res, next) => {
   return res.send("your secret value is 42");

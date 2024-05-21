@@ -296,6 +296,12 @@ Steps:
 const isLoggedIn = req.isAuthenticated() && !!req.user
 ```
 
+5.Implement Logout
+
+```
+req.logout(() => res.redirect("/")); // From passport - Removes req.user and clears any logged in session
+```
+
 Notes
 
 1. express-session configuration
