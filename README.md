@@ -197,6 +197,8 @@ Steps:
           ); // The specified redirect in our google configuration
           ```
 
+5.  Set Cookies and Session (see next topics)
+
 ### Cookies Based Auhentication
 
     - Cookies are basically string data stored in the browser
@@ -275,14 +277,16 @@ Steps:
 
   2. Wrap Up Cookie with Passport
 
-  - Set up serializeUser and deserializeUser methods (before the app runs)
+  - Set up serializeUser() and deserializeUser() methods (before the app runs)
   - In the google/callback options - set sessoin to true (default)
   - Add passport session MW right after the initialization
     ```
     app.use(passport.initialize());
     app.use(passport.session()); // Configs the sessions: Authentications the session, config the serializeUser and deserializeUser logic etc
     ```
-  -
+    Now we can see we got a cookie when logged in
+
+  3. Define the scope of my cookie => Updating mu serializeUser() and deserializeUser() logic
 
 - Notes
 

@@ -12,7 +12,7 @@ require("dotenv").config();
 
 const verifyCallback = (accessToken, refreshToken, profile, done) => {
   console.log({ accessToken, refreshToken, profile });
-  done(null, profile);
+  done(null, profile); // This is the callback function to be run after the verification, so it would be here the DB logic, for example
 };
 
 // Passport Configuration MW
@@ -29,32 +29,39 @@ passport.use(
 
 // Save session to the cookie
 passport.serializeUser((user, done) => {
-  done(null, user); // callbabk to run when there's no error ()
+  done(null, user.id);
 });
 
 // Read the session from the cookie
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+// the arg is id, only because we saved only the id in the serializeUser
+passport.deserializeUser((id, done) => {
+  // It could be here some database lookups, from the obj (the user data read from the cookie)  | If we set the user.id in the serialize, this obj would be the userId
+  /*
+    const user = await User.findById(userId);
+    done(null, user)
+  */
+  done(null, id);
 });
 
 const app = express();
 
 app.use(helmet()); // The very 1st MW, to ensure all reqs passes here
+// Session Config
 app.use(
   session({
-    name: "MY-COOKIE",
+    name: "MY-COOKIE", // Any name I want
     secret: [process.env.SESSION_SECRET_2, process.env.SESSION_SECRET_1], // Usually, we can use array, to rotate secret keys and not unable the current secret key
     resave: false, // avoid saving session that hasn't been modified
     saveUninitialized: true, // Save uninitialized sessions
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // time of persistance of the cookie
-      secure: true, // It makes our cookie works only in https
+      secure: true, // It makes our cookie works only in https - maybe it could be off in development mode and true in production?
       httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not client JavaScript
     },
   })
 );
 app.use(passport.initialize());
-app.use(passport.session()); // Configs the sessions: Authentications the session, config the serializeUser and deserializeUser logic etc
+app.use(passport.session()); // Configs the sessions: Authenticates the session, config the serializeUser and deserializeUser logic etc
 
 // Notice that this MW is not running here, it was just created, to be implemented whenever it is wanted
 const checkLoggedIn = (req, res, next) => {
@@ -67,8 +74,10 @@ const checkLoggedIn = (req, res, next) => {
   next();
 };
 
+// Where my Google login button should point to
 app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
 
+// The specified redirect in our google configuration
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
@@ -79,7 +88,7 @@ app.get(
   (req, res, next) => {
     console.log("Google called us back!! Yaay");
   }
-); // The specified redirect in our google configuration
+);
 
 app.get("/auth/logout", (req, res, next) => {});
 
