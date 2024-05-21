@@ -288,6 +288,11 @@ Steps:
 
   3. Define the scope of my cookie => Updating mu serializeUser() and deserializeUser() logic
 
+  4. Create Restricing Middleware
+
+  - In our case, it's the secret route to be protected
+  -
+
 - Notes
 
   1. express-session configuration

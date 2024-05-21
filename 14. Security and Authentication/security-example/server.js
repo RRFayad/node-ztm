@@ -52,7 +52,7 @@ app.use(
     name: "MY-COOKIE", // Any name I want
     secret: [process.env.SESSION_SECRET_2, process.env.SESSION_SECRET_1], // Usually, we can use array, to rotate secret keys and not unable the current secret key
     resave: false, // avoid saving session that hasn't been modified
-    saveUninitialized: true, // Save uninitialized sessions
+    saveUninitialized: false, // Save uninitialized sessions - As I noticed, when true generates a cookie even before I log in
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // time of persistance of the cookie
       secure: true, // It makes our cookie works only in https - maybe it could be off in development mode and true in production?
@@ -61,11 +61,12 @@ app.use(
   })
 );
 app.use(passport.initialize());
-app.use(passport.session()); // Configs the sessions: Authenticates the session, config the serializeUser and deserializeUser logic etc
+app.use(passport.session()); // Configs the sessions and creates the req.user: Authenticates the session, config the serializeUser and deserializeUser logic etc
 
 // Notice that this MW is not running here, it was just created, to be implemented whenever it is wanted
 const checkLoggedIn = (req, res, next) => {
-  const isLoggedIn = true; // TO IMPLEMENT LOGIC HERE
+  console.log(`Current user is: ${req.user}`);
+  const isLoggedIn = req.isAuthenticated() && !!req.user; // req.isAuthenticated the a method from passport to add security to this check
   if (!isLoggedIn) {
     return res.status(401).json({
       error: "You must log in!",
