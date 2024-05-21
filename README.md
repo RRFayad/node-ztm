@@ -181,21 +181,21 @@ Steps:
 
     - Add the google (or other network) callback endpoint logic
 
-          ```
-          app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
+    ```
+      app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
 
-          app.get(
-          "/auth/google/callback",
-          passport.authenticate("google", {
-            failureRedirect: "/failure",
-            successRedirect: "/",
-            session: false, // We will keep it as false just for now
-          }),
-          (req, res, next) => {
-            console.log("Google called us back!! Yaay");
-          }
-          ); // The specified redirect in our google configuration
-          ```
+      app.get(
+      "/auth/google/callback",
+      passport.authenticate("google", {
+        failureRedirect: "/failure",
+        successRedirect: "/",
+        session: false, // We will keep it as false just for now
+      }),
+      (req, res, next) => {
+        console.log("Google called us back!! Yaay");
+      }
+      ); // The specified redirect in our google configuration
+    ```
 
 5.  Set Cookies and Session (see next topics)
 
@@ -268,41 +268,44 @@ Steps:
 
 ### Implementing Auth Check with Cookies
 
-- Steps:
+Steps:
 
-  1. Config express-session
+1. Config express-session
 
-  - npm install express-session
-  - Config the session / cookie right before passport.initialize()
+- npm install express-session
+- Config the session / cookie right before passport.initialize()
 
-  2. Wrap Up Cookie with Passport
+2. Wrap Up Cookie with Passport
 
-  - Set up serializeUser() and deserializeUser() methods (before the app runs)
-  - In the google/callback options - set sessoin to true (default)
-  - Add passport session MW right after the initialization
-    ```
-    app.use(passport.initialize());
-    app.use(passport.session()); // Configs the sessions: Authentications the session, config the serializeUser and deserializeUser logic etc
-    ```
-    Now we can see we got a cookie when logged in
+- Set up serializeUser() and deserializeUser() methods (before the app runs)
+- In the google/callback options - set sessoin to true (default)
+- Add passport session MW right after the initialization
+  ```
+  app.use(passport.initialize());
+  app.use(passport.session()); // Configs the sessions: Authentications the session, config the serializeUser and deserializeUser logic etc
+  ```
+  Now we can see we got a cookie when logged in
 
-  3. Define the scope of my cookie => Updating mu serializeUser() and deserializeUser() logic
+3. Define the scope of my cookie => Updating mu serializeUser() and deserializeUser() logic
 
-  4. Create Restricing Middleware
+4. Create Restricing Middleware
 
-  - In our case, it's the secret route to be protected
-  -
+- In our case, it's the secret route to be protected is the /secret with our checkLoggedIn logic, which implements req.isAuthenticated() ()passport method and check if there's an user
 
-- Notes
+```
+const isLoggedIn = req.isAuthenticated() && !!req.user
+```
 
-  1. express-session configuration
+Notes
 
-  - The secret keys are the 'signatures' of the cookie being created by the server
-  - We can use an array of keys, for when we want to update the key but not to unable the current used kes
+1. express-session configuration
 
-  2. About Passport cookie implementation
+- The secret keys are the 'signatures' of the cookie being created by the server
+- We can use an array of keys, for when we want to update the key but not to unable the current used kes
 
-  - Passport has 2 funcions to work with cookies:
-    - passport.serialize() => serialize the user data to the cookie
-    - passport.deserialize()
-      - deserialize, or take the data from the cookie, and places it into the request object (req.user)
+2. About Passport cookie implementation
+
+- Passport has 2 funcions to work with cookies:
+  - passport.serialize() => serialize the user data to the cookie
+  - passport.deserialize()
+    - deserialize, or take the data from the cookie, and places it into the request object (req.user)
