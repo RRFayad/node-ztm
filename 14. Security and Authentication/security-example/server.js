@@ -55,7 +55,7 @@ app.use(
     saveUninitialized: false, // Save uninitialized sessions - As I noticed, when true generates a cookie even before I log in
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // time of persistance of the cookie
-      secure: true, // It makes our cookie works only in https - maybe it could be off in development mode and true in production?
+      secure: true, // It makes our cookie works only in https -  process.env.NODE_ENV === 'production', // Set to true in production to ensure cookies are sent over HTTPS
       httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not client JavaScript
     },
   })

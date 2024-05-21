@@ -315,3 +315,13 @@ Notes
   - passport.serialize() => serialize the user data to the cookie
   - passport.deserialize()
     - deserialize, or take the data from the cookie, and places it into the request object (req.user)
+
+### Wrap Up
+
+Possible Next Steps:
+
+- Implementing Refresh Tokens
+- Managing sessions with Databases (check compatible sessoin stores)
+- More levels of security (okta - Role-Based Access Control)
+
+- [Node Security cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)
