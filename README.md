@@ -126,8 +126,9 @@ Steps:
 ### Implementing Google OAuth in our application
 
 - Setup Application in Google
-  - Create OAuth Client ID
-  - Attention to the URIs
+  - Look for OAuth Credential
+    - Create OAuth Client ID
+    - Attention to the URIs => JavaScript Origins (my front end) and redurect URIs (the callback)
 
 ### Authentication Endpoints With Middleware
 
@@ -146,6 +147,12 @@ Steps:
     - Get the keys in a .env file
 
 2.  Structure Endpoints and Auth Middlwares
+
+    - /auth/google
+    - /auth/google/callback
+    - /auth/logout
+    - /auth/failure
+    - /secret (for testing purpose)
 
 3.  Passport Config
 
@@ -189,7 +196,7 @@ Steps:
       passport.authenticate("google", {
         failureRedirect: "/failure",
         successRedirect: "/",
-        session: false, // We will keep it as false just for now
+        session: false, // We will keep it as false just for now (as we are not controlling cookies)
       }),
       (req, res, next) => {
         console.log("Google called us back!! Yaay");
@@ -274,6 +281,25 @@ Steps:
 
 - npm install express-session
 - Config the session / cookie right before passport.initialize()
+
+  ```
+  app.use(helmet()); // The very 1st MW, to ensure all reqs passes here
+  // Session Config
+  app.use(
+  session({
+    name: "MY-COOKIE", // Any name I want
+    secret: [process.env.SESSION_SECRET_2, process.env.SESSION_SECRET_1], // Usually, we can use array, to rotate secret keys and not unable the current secret key
+    resave: false, // avoid saving session that hasn't been modified
+    saveUninitialized: false, // Save uninitialized sessions - As I noticed, when true generates a cookie even before I log in
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // time of persistance of the cookie
+      secure: true, // It makes our cookie works only in https -  process.env.NODE_ENV === 'production', // Set to true in production to ensure cookies are sent over HTTPS
+      httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not client JavaScript
+    },
+  })
+  );
+  app.use(passport.initialize());
+  ```
 
 2. Wrap Up Cookie with Passport
 
